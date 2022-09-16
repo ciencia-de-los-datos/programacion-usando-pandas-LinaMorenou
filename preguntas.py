@@ -70,7 +70,9 @@ def pregunta_04():
     E    4.785714
     Name: _c2, dtype: float64
     """
-    return
+    col_c1_group_c2 = tbl0.groupby('_c1')['_c2'].mean()
+
+    return col_c1_group_c2
 
 
 def pregunta_05():
@@ -87,8 +89,10 @@ def pregunta_05():
     E    9
     Name: _c2, dtype: int64
     """
-    return
+    
+    col_max_c2_by_c1 = tbl0.groupby('_c1')['_c2'].max()
 
+    return col_max_c2_by_c1
 
 def pregunta_06():
     """
