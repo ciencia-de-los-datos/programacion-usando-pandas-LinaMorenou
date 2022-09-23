@@ -161,8 +161,11 @@ def pregunta_09():
     39   39   E    5  1998-01-26  1998
 
     """
-    return
+    import datetime as dt
 
+    df = tbl0['_c3'].str.split('-', n=1, expand=True)
+    tbl0['year'] = df.iloc[:,[0]]
+    return tbl0 
 
 def pregunta_10():
     """
@@ -178,8 +181,11 @@ def pregunta_10():
     3   D                  1:2:3:5:5:7
     4   E  1:1:2:3:3:4:5:5:5:6:7:8:8:9
     """
-    return
+    data = tbl0[['_c1','_c2']] 
+    data['_c2'] = data['_c2'].apply(lambda x: str(x))
+    data = data.sort_values(['_c2'], ascending=True).groupby(['_c1'], as_index=True).agg({'_c2':':'.join})
 
+    return data
 
 def pregunta_11():
     """
@@ -197,7 +203,9 @@ def pregunta_11():
     38   38      d,e
     39   39    a,d,f
     """
-    return
+    data = tbl1
+    data = data.sort_values(['_c4'], ascending=True).groupby(['_c0'], as_index=False).agg({'_c4':','.join})
+    return data
 
 
 def pregunta_12():
@@ -215,7 +223,13 @@ def pregunta_12():
     38   38                    eee:0,fff:9,iii:2
     39   39                    ggg:3,hhh:8,jjj:5
     """
-    return
+    data = tbl2
+    data['_c5b'] = data['_c5b'].apply(lambda x: str(x))
+    data['_c5'] = data['_c5a'] + ':' + data['_c5b']
+
+    data = data[['_c0', '_c5']]
+    data = data.sort_values(['_c5'], ascending=True).groupby(['_c0'], as_index=False).agg({'_c5':','.join})
+    return data
 
 
 def pregunta_13():
@@ -232,4 +246,15 @@ def pregunta_13():
     E    275
     Name: _c5b, dtype: int64
     """
-    return
+     df1 = tbl0[['_c0','_c1']]
+    df2 = tbl2[['_c0','_c5b']]
+
+
+    data = pd.merge(
+        df1,
+        df2,
+        sort=True
+    )
+    data = data.groupby('_c1')['_c5b'].sum()
+
+    return data
